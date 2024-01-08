@@ -1,0 +1,21 @@
+alias grr='rb_ad=$(git show --pretty="%ad" --quiet)
+rb_an=$(git show --pretty="%an" --quiet)
+rb_ae=$(git show --pretty="%ae" --quiet)
+rb_cs=$(git show --pretty="%s" --quiet)
+rb_cn=$(git show --pretty="$N" --quiet)
+echo $rb_ad
+echo $rb_an
+echo $rb_ae
+echo $rb_cs
+echo $rb_cn'
+
+alias agrr='git commit --amend -m"$rb_cs" --date="$rb_ad" --author="$rb_an<$rb_ae>"'
+alias cgrr='git commit -m"$rb_cs" --date="$rb_ad" --author="$rb_an<$rb_ae>"'
+
+alias grrc='git rebase --continue'
+alias grra='git rebase --abort'
+
+alias flushdate="git filter-repo --force --commit-callback '
+  commit.committer_date = commit.author_date
+' --refs HEAD
+"
