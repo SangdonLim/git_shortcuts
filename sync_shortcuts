@@ -1,0 +1,7 @@
+alias flushsync="find . -type f -name '*conflicted copy*' -delete"
+
+alias unlock='
+find . -type f -not -perm +111 -print0 | xargs -0 chmod 644
+find . -type d -print0 | xargs -0 chmod 755
+echo "* all files 644-ed; dirs 755-ed"
+'
