@@ -15,7 +15,34 @@ alias cgrr='git commit -m"$rb_cs" --date="$rb_ad" --author="$rb_an<$rb_ae>"'
 alias grrc='git rebase --continue'
 alias grra='git rebase --abort'
 
-alias flushdate="git filter-repo --force --commit-callback '
-  commit.committer_date = commit.author_date
-' --refs HEAD
-"
+flushdate() {
+
+  current_branch=$(git symbolic-ref --short HEAD)
+
+  if [[ $# -eq 0 ]] ; then
+
+    echo "flushing dates on all commits in $current_branch"
+
+    git filter-repo --force --commit-callback '
+      commit.committer_date = commit.author_date
+    ' --refs HEAD
+
+  else
+
+    echo "flushing dates on commits $1..$current_branch"
+
+    rev_parse_output=$(git rev-parse $1 2>&1)
+
+    if [[ $rev_parse_output =~ "ambiguous" ]] ; then
+      # need to bail out here because continuing would rewrite the entire history
+      echo "$rev_parse_output"
+      echo "bailing out.."
+      return 0;
+    fi
+
+    git filter-repo --force --commit-callback '
+      commit.committer_date = commit.author_date
+    ' --refs $1..$current_branch
+  fi
+
+}
