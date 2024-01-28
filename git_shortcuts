@@ -1,16 +1,17 @@
-alias grr='rb_ad=$(git show --pretty="%ad" --quiet)
-rb_an=$(git show --pretty="%an" --quiet)
-rb_ae=$(git show --pretty="%ae" --quiet)
-rb_cs=$(git show --pretty="%s" --quiet)
-rb_cn=$(git show --pretty="$N" --quiet)
-echo $rb_ad
-echo $rb_an
-echo $rb_ae
-echo $rb_cs
-echo $rb_cn'
+alias grr='
+rebase_author_date=$(   git show --pretty="%ad" --quiet)
+rebase_author_name=$(   git show --pretty="%an" --quiet)
+rebase_author_email=$(  git show --pretty="%ae" --quiet)
+rebase_commit_message=$(git show --pretty="%s" --quiet)
+rebase_committer_name=$(git show --pretty="%cn" --quiet)
+echo $rebase_author_date
+echo $rebase_author_name
+echo $rebase_author_email
+echo $rebase_commit_message
+echo $rebase_committer_name'
 
-alias agrr='git commit --amend -m"$rb_cs" --date="$rb_ad" --author="$rb_an<$rb_ae>"'
-alias cgrr='git commit -m"$rb_cs" --date="$rb_ad" --author="$rb_an<$rb_ae>"'
+alias agrr='git commit --amend -m"$rebase_commit_message" --date="$rebase_author_date" --author="$rebase_author_name<$rebase_author_email>"'
+alias cgrr='git commit -m"$rebase_commit_message" --date="$rebase_author_date" --author="$rebase_author_name<$rebase_author_email>"'
 
 alias grrc='git rebase --continue'
 alias grra='git rebase --abort'
