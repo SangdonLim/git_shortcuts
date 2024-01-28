@@ -47,3 +47,37 @@ flushdate() {
   fi
 
 }
+
+meow() {
+
+  # meow: change commit message of a target commit while keeping committer/author information
+  # usage:
+  # meow 12345678 'new commit message'
+  # meow 12345678 'new commit message\n\nsneaky sneaky'
+
+  current_branch=$(git symbolic-ref --short HEAD)
+
+  if [[ $# -eq 0 ]] ; then
+
+    echo "first argument is empty; it must be a commit hash"
+
+  else
+
+    echo "changing commit message on commit $1"
+
+    rev_parse_output=$(git rev-parse $1 2>&1)
+
+    if [[ $rev_parse_output =~ "ambiguous" ]] ; then
+      # need to bail out here because continuing would rewrite the entire history
+      echo "$rev_parse_output"
+      echo "bailing out.."
+      return 0;
+    fi
+
+    git filter-repo --force --commit-callback "
+      if commit.original_id == b'"$rev_parse_output"':
+        commit.message = b'"$2"\n'
+    " --refs $1~1..$current_branch
+  fi
+
+}
