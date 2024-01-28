@@ -1,5 +1,7 @@
 source git_shortcuts/sync_shortcuts
 source git_shortcuts/git_shortcuts
+CURRENT_PATH=$(pwd)
+export PATH=$PATH:$CURRENT_PATH/git_shortcuts
 
 echo '* custom aliases loaded'
 if [[ $OSTYPE == 'linux-gnu2' ]]; then
